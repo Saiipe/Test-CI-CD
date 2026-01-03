@@ -17,7 +17,7 @@ jobs:
       - name: Ensure Apache is installed and running
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ec2-3-238-64-87.compute-1.amazonaws.com
+          host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -53,6 +53,6 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "./"
-          REMOTE_HOST: "ec2-34-201-16-3.compute-1.amazonaws.com"
+          REMOTE_HOST: ${{ secrets.EC2_HOST }}
           REMOTE_USER: "ec2-user"
           TARGET: "/var/www/html"
