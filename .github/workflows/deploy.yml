@@ -7,19 +7,34 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
+    name: Install Apache and Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Copy files with SSH
+      # 1️⃣ Instalar e iniciar Apache
+      - name: Install and start Apache
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ec2-34-201-16-3.compute-1.amazonaws.com
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo yum update -y
+            sudo yum install httpd -y
+            sudo systemctl start httpd
+            sudo systemctl enable httpd
+            sudo chown -R ec2-user:ec2-user /var/www/html
+
+      # 2️⃣ Deploy dos arquivos
+      - name: Deploy site to Apache
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          ARGS: "-rltgoDzvO --delete"
-          SOURCE: " ./ "
+          ARGS: "-rltgoDzvO"
+          SOURCE: "./"
           REMOTE_HOST: "ec2-34-201-16-3.compute-1.amazonaws.com"
           REMOTE_USER: "ec2-user"
-          TARGET: "/home/ec2-user"
+          TARGET: "/var/www/html"
