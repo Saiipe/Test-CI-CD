@@ -17,7 +17,7 @@ jobs:
       - name: Ensure Apache is installed and running
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ec2-34-201-16-3.compute-1.amazonaws.com
+          host: ec2-3-238-64-87.compute-1.amazonaws.com
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
